@@ -1,0 +1,149 @@
+//* DONE:
+    1. Check MSSQL db currnet insert                        V
+    2. Fix Google Authenticator                             V
+    3. Break start + end with Badge_ID                      V
+    4. Create new tables with new parameters                V
+    5. Change functions in library                          V
+    6. Change parameters in clockin.cglms.com               V            
+    7. add IdEmp to form+clockin.users db                   V
+    7. Remove scraps (empty + duplicate)                    V
+    8. Edit scripts + Script to move from clockin.break     V
+    9. Union                                                V
+    10. Break start/end time view                           V
+*//
+
+//* PERFORM:
+    11. Insert to attend only if last record                V
+    of TimeRecord is more than 10H 
+	12. Insert to start + end break only once a day and     V
+	if last record is more than 10H
+    13. Insert to entrance only once a day and if last      V
+    record is more than 10H
+    14. Logout check if last logout today +                 V
+	if last logout over 10H + yesterday
+*//
+
+//* WEB INTERFACE:
+    15. Responsive profile.php                              V
+*//
+
+//* QA:
+    16. Create two new users
+	User01
+    17. Login logout login
+    18. login break logout login
+    19. Login break out logout login
+	User02
+	20. Login logout login
+    21. login break break out logout login
+*//
+
+//* PRODUCTION:
+    22. Configure NLFINDB01 ocdb connection
+    23. Create table dbo.demo_attend 
+*//
+
+
+//* EDIT:
+    24. $to_email = "it@cglms.com";
+*//
+
+SELECT * 
+FROM PEOPLE 
+WHERE FIRST_NAME = 'Mike' 
+      AND LAST_NAME IN ('Smith','Jones') 
+ORDER BY FIELD(LAST_NAME, 'Smith', 'Jones') DESC LIMIT 1; 
+	
+
+id, DateRecord, TimeRecord, TypeInOut, IdEmp, BadgeNum, ClockNum, ManualRec, EventId, Event_Time, Note, ProjectId, Meal
+$id, $DateRecord, $TimeRecord, $TypeInOut, $IdEmp, $BadgeNum, $ClockNum, $ManualRec, $EventId, $Event_Time, $Note, $ProjectId, $Meal
+'$id', '$DateRecord', '$TimeRecord', '$TypeInOut', '$IdEmp', '$BadgeNum', '$ClockNum', '$ManualRec', '$EventId', '$Event_Time', '$Note', '$ProjectId', '$Meal'
+
+dbo.ClockTraffic
+
+id   DateRecord          TimeRecord   TypeInOut        IdEmp               BadgeNum            ClockNum   ManualRec  EventId  Event_Time               Note       ProjectId       Meal
+1..  Y-m-d 00:00:00.000  24H hh:mm    0 - IN 1 - OUT   from dbo.Employee   from clockin.users  0          0          0        DateRecord current date             0               0      
+
+ALTER TABLE clockin.users ADD IdEmp varchar(250) NOT NULL
+
+SELECT*
+  FROM [micro_data].[dbo].[ClockTraffic]
+  WHERE BadgeNum='712'
+  
+  
+dbo.Employee
+SELECT Emp_Id FROM dbo.Employee WHERE Badge=:Badge_ID;
+SELECT Meal FROM dbo.Employee WHERE Badge=:Badge_ID;
+SELECT ProjectId FROM dbo.Employee WHERE Badge=:Badge_ID;
+
+clockin
+
+CREATE TABLE `users` (
+`id` int(11) NOT NULL AUTO_INCREMENT,
+`name` varchar(50) NOT NULL,
+`username` varchar(50) NOT NULL,
+`email` varchar(100) NOT NULL,
+`password` varchar(250) NOT NULL,
+`google_secret_code` varchar(250) NOT NULL,
+`badge` int(11) NOT NULL,
+PRIMARY KEY (`id`)
+);
+
+CREATE TABLE `attend` (
+`id` int(11) NOT NULL AUTO_INCREMENT,
+`DateRecord` varchar(50) NOT NULL,
+`TimeRecord` varchar(50) NOT NULL,
+`TypeInOut` varchar(250) NOT NULL,
+`IdEmp` varchar(250) NOT NULL,
+`BadgeNum` varchar(50) NOT NULL,
+`ClockNum` varchar(50) NOT NULL,
+`ManualRec` varchar(50) NOT NULL,
+`EventId` varchar(50) NOT NULL,
+`Event_Time` varchar(50) NOT NULL,
+`Note` varchar(50) NOT NULL,
+`ProjectId` varchar(50) NOT NULL,
+`Meal` varchar(50) NOT NULL,
+PRIMARY KEY (`id`)
+);
+
+CREATE TABLE `break` (
+`id` int(11) NOT NULL AUTO_INCREMENT,
+`DateRecord` varchar(50) NOT NULL,
+`TimeRecord` varchar(50) NOT NULL,
+`TypeInOut` varchar(250) NOT NULL,
+`IdEmp` varchar(250) NOT NULL,
+`BadgeNum` varchar(50) NOT NULL,
+`ClockNum` varchar(50) NOT NULL,
+`ManualRec` varchar(50) NOT NULL,
+`EventId` varchar(50) NOT NULL,
+`Event_Time` varchar(50) NOT NULL,
+`Note` varchar(50) NOT NULL,
+`ProjectId` varchar(50) NOT NULL,
+`Meal` varchar(50) NOT NULL,
+PRIMARY KEY (`id`)
+);
+
+CREATE TABLE `entrance` (
+`id` int(11) NOT NULL AUTO_INCREMENT,s
+`Username` varchar(50) NOT NULL,
+`ENT_Time` varchar(50) NOT NULL,
+`ENT_Date` varchar(250) NOT NULL,
+PRIMARY KEY (`id`)
+);
+
+CREATE TABLE demo_attend
+( 
+  id int(150) NOT NULL AUTO_INCREMENT,
+  DateRecord VARCHAR(150),
+  TimeRecord VARCHAR(150),
+  TypeInOut VARCHAR(150),  
+  IdEmp VARCHAR(150),
+  BadgeNum VARCHAR(150),  
+  ClockNum VARCHAR(150),
+  ManualRec VARCHAR(150),  
+  EventId VARCHAR(150),
+  Event_Time VARCHAR(150),  
+  Note VARCHAR(150),
+  ProjectId VARCHAR(150),
+  Meal VARCHAR(150)
+);

@@ -1,0 +1,8 @@
+USE micro_data
+INSERT INTO micro_data.dbo.ClockTraffic(DateRecord, TimeRecord, TypeInOut, IdEmp, BadgeNum, ClockNum, ManualRec, EventId, Event_Time, Note, ProjectId, Meal)
+ SELECT DateRecord, TimeRecord, TypeInOut, IdEmp, BadgeNum, ClockNum, ManualRec, EventId, Event_Time, Note, ProjectId, Meal FROM micro_data.dbo.demo_attend WHERE Rec_Date >= cast(cast(getdate() as date) as datetime)
+ UNION
+ SELECT DateRecord, TimeRecord, TypeInOut, IdEmp, BadgeNum, ClockNum, ManualRec, EventId, Event_Time, Note, ProjectId, Meal FROM micro_data.dbo.ClockTraffic; 
+GO
+
+
